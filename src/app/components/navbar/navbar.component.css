@@ -1,10 +1,11 @@
+
 /* Estilos para el Navbar */
 
 .navbar {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding: 50px 64px;
+    padding: 60px 64px;
     background-color: #000000;
     position: relative;
 }
@@ -24,7 +25,7 @@
     text-decoration: none;
     color: #FFFFFF;
     font-size: 17px;
-    font-weight: 100;
+    font-weight: 200;
     padding: 8px 24px;
 }
 
@@ -70,7 +71,7 @@
         height: 0;
         overflow: hidden;
         flex-direction: column;
-        background-color: #424242;
+        background-color: #000000;
         text-align: center;
     }
 
@@ -86,7 +87,8 @@
     }
 
     #menu-toggle:checked + .menu-icon + .nav-links {
-        height: 100vh;
+        height: auto;
+        overflow: visible;
     }
 
     #menu-toggle:checked + .menu-icon .line:nth-child(1) {

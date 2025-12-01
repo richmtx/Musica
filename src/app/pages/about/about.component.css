@@ -1,0 +1,109 @@
+
+/* Estilos de ABOUT */
+
+.about-section {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px;
+    background-color: #fff;
+}
+
+.about-container {
+    display: flex;
+    max-width: 1200px;
+    width: 100%;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.about-image img {
+    margin-left: 38px;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 0;
+}
+
+.about-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 600px;
+}
+
+.about-text h2 {
+    margin-bottom: 20px;
+    font-weight: 200;
+    font-size: 2rem;
+    color: #000;
+}
+
+.about-text p {
+    font-size: 1rem;
+    font-weight: 200;
+    color: #000;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+/*---------------------------*/
+/*-----DISEÑO RESPONSIVO-----*/
+/*---------------------------*/
+
+@media (max-width: 992px) {
+    .about-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .about-text {
+        align-items: center;
+        padding: 0 20px; 
+        margin: 0 auto;
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .about-image {
+        margin-left: 0;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .about-image img {
+        margin: 0 auto; 
+        display: block;
+    }
+}
+
+@media(max-width: 768px) {
+    .about-image img {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .about-text {
+        align-items: center;
+        margin-left: 0;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .about-text, .h2 {
+        margin-right: 0;
+        align-items: center;
+    }
+
+    .about-text, .p {
+        margin-left: 0;
+        margin-right: 0;
+        align-items: center;
+    }
+}

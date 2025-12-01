@@ -1,0 +1,119 @@
+
+/* Estilos para STUDIO */
+
+.about-section {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px;
+    background-color: #fff;
+}
+
+.about-container {
+    display: flex;
+    max-width: 1200px;
+    width: 100%;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.about-image img {
+    margin-left: 30px;
+    width: 100%;
+    max-width: 800px; 
+    border-radius: 0;
+}
+
+.about-image-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+    margin-left: 30px; 
+}
+
+.about-image-column img {
+    margin-bottom: 60px;
+    width: 100%; 
+    max-width: 650px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.about-text {
+    margin-left: 27px;
+    flex: 1;
+    display: flex;
+    flex-direction: column; 
+    justify-content: flex-start; 
+    gap: 15px;
+}
+
+.about-text h4 {
+    margin: 0;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #000;
+}
+
+.about-text p {
+    margin: 0;
+    margin-top: -15px;
+    font-size: 1rem;
+    font-weight: 200;
+    color: #000;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+/*---------------------------*/
+/*-----DISEÑO RESPONSIVO-----*/
+/*---------------------------*/
+
+@media (max-width: 992px) {
+    .about-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .about-image-column {
+        margin-left: 0;
+    }
+
+    .about-text {
+        align-items: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .about-section {
+        padding: 30px;
+    }
+
+    .about-text p {
+        font-size: 0.95rem;
+    }
+
+    .about-image-column img {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-text {
+        align-items: center;
+        margin-left: 0;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .about-text, .h4 {
+        margin-right: 0;
+        align-items: center;
+    }
+
+    .about-text, .p {
+        margin-left: 0;
+        margin-right: 0;
+        align-items: center;
+    }
+}
