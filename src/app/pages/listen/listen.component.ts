@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Inject,
-  PLATFORM_ID
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 
