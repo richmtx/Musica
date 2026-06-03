@@ -1,78 +1,327 @@
+/* ─── Keyframes ─────────────────────────────────────────────── */
+@keyframes charUp {
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+    }
 
-/* Estilos para CONTACT */
-
-body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.contact-section {
-    text-align: center;
-    padding: 50px 20px;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
-.contact-section h2 {
-    font-size: 2rem;
-    font-weight: 200;
-    margin-bottom: 20px;
-    color: #444;
+/* ─── Page wrapper ───────────────────────────────────────────── */
+.contact-page {
+    min-height: 100vh;
+    padding: 0 5%;
+    background: #0a0a0a;
+    color: #e8e4dc;
+    font-family: var(--font-sans);
+    position: relative;
 }
 
-.contact-form {
-    max-width: 600px;
-    margin: 0 auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.contact-page::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+}
+
+/* ─── Hero ───────────────────────────────────────────────────── */
+.contact-hero {
+    padding: 7rem 0 4rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
 }
 
-.contact-form label {
+.contact-hero::after {
+    content: '';
     display: block;
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-    color: #555;
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, rgba(232, 228, 220, 0.3), transparent);
+    margin-top: 1.5rem;
 }
 
-.contact-form input,
-.contact-form textarea {
-    width: 100%;
-    padding: 10px;
+.contact-hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(4.5rem, 10vw, 8rem);
     font-weight: 300;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
+    font-style: italic;
+    letter-spacing: 0.06em;
+    color: #e8e4dc;
+    line-height: 1;
+    text-align: center;
+}
+
+.contact-hero h1 span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(28px);
+    animation: charUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.contact-hero h1 span:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.contact-hero h1 span:nth-child(2) {
+    animation-delay: 0.10s;
+}
+
+.contact-hero h1 span:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.contact-hero h1 span:nth-child(4) {
+    animation-delay: 0.20s;
+}
+
+.contact-hero h1 span:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+.contact-hero h1 span:nth-child(6) {
+    animation-delay: 0.30s;
+}
+
+.contact-hero h1 span:nth-child(7) {
+    animation-delay: 0.35s;
+}
+
+.hero-subtitle {
+    font-size: 0.8rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(232, 228, 220, 0.35);
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeIn 1s ease 0.5s forwards;
+}
+
+/* ─── Layout grid ────────────────────────────────────────────── */
+.contact-layout {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 1000px;
+    margin: 0 auto;
+    border: 0.5px solid rgba(232, 228, 220, 0.1);
+}
+
+/* ─── Info column ────────────────────────────────────────────── */
+.info-col {
+    padding: 3.5rem 3rem;
+    border-right: 0.5px solid rgba(232, 228, 220, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.info-label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(232, 228, 220, 0.28);
+    font-weight: 300;
+    margin-bottom: 0.6rem;
+}
+
+.info-value {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: #e8e4dc;
+    line-height: 1.5;
+}
+
+.info-value a {
+    color: rgba(232, 228, 220, 0.6);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-family: var(--font-sans);
+    letter-spacing: 0.04em;
+    transition: color 0.3s;
+}
+
+.info-value a:hover {
+    color: #e8e4dc;
+}
+
+.social-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 0.4rem;
+}
+
+.social-link {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(232, 228, 220, 0.35);
+    text-decoration: none;
+    font-weight: 300;
+    border-bottom: 0.5px solid rgba(232, 228, 220, 0.12);
+    padding-bottom: 2px;
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.social-link:hover {
+    color: #e8e4dc;
+    border-color: rgba(232, 228, 220, 0.4);
+}
+
+/* ─── Form column ────────────────────────────────────────────── */
+.form-col {
+    padding: 3.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.field label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(232, 228, 220, 0.3);
+    font-weight: 300;
+}
+
+.field input,
+.field textarea {
+    background: transparent;
+    border: none;
+    border-bottom: 0.5px solid rgba(232, 228, 220, 0.15);
+    color: #e8e4dc;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 300;
+    padding: 0.6rem 0;
     outline: none;
-    transition: border-color 0.3s ease;
+    transition: border-color 0.3s;
+    width: 100%;
     resize: none;
 }
 
-.contact-form input:focus,
-.contact-form textarea:focus {
-    border-color: #343541;
+.field input::placeholder,
+.field textarea::placeholder {
+    color: rgba(232, 228, 220, 0.2);
+    font-weight: 200;
 }
 
+.field input:focus,
+.field textarea:focus {
+    border-bottom-color: rgba(232, 228, 220, 0.5);
+}
+
+.field textarea {
+    min-height: 90px;
+}
+
+/* ─── Submit button ──────────────────────────────────────────── */
 .btn-submit {
-    display: inline-block;
-    background-color: #343541;
-    color: #fff;
-    border: none;
-    padding: 10px 50px;
-    font-size: 1rem;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 200;
-    border-radius: 5px;
+    align-self: flex-start;
+    background: transparent;
+    border: 0.5px solid rgba(232, 228, 220, 0.2);
+    color: rgba(232, 228, 220, 0.7);
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 300;
+    padding: 0.75rem 2.5rem;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: border-color 0.3s, color 0.3s;
+    margin-top: 0.5rem;
 }
 
 .btn-submit:hover {
-    background-color: #000000; 
+    border-color: rgba(232, 228, 220, 0.6);
+    color: #e8e4dc;
+}
+
+/* ─── Footer divider ─────────────────────────────────────────── */
+.section-divider {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin: 5rem 0 3rem;
+    position: relative;
+    z-index: 1;
+}
+
+.section-divider::before,
+.section-divider::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: rgba(232, 228, 220, 0.08);
+}
+
+.divider-text {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.8rem;
+    color: rgba(232, 228, 220, 0.2);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+}
+
+/* ─── Intersection Observer ──────────────────────────────────── */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 700px) {
+    .contact-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .info-col {
+        border-right: none;
+        border-bottom: 0.5px solid rgba(232, 228, 220, 0.08);
+        padding: 2.5rem 1.5rem;
+    }
+
+    .form-col {
+        padding: 2.5rem 1.5rem;
+    }
+
+    .contact-hero {
+        padding: 4rem 0 3rem;
+    }
 }

@@ -1,3 +1,60 @@
 <app-navbar></app-navbar>
 
-<p>index works!</p>
+<!-- Canvas oculto para extracción de color -->
+<canvas #colorCanvas style="display:none"></canvas>
+
+<div class="home-page" (keydown)="onKeydown($event)" tabindex="0">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <span class="page-label">Selected works</span>
+    </div>
+
+    <!-- GRID DE ÁLBUMES -->
+    <div class="albums-wrap">
+        <div class="albums-grid">
+            <div *ngFor="let album of albums; let i = index" class="album-cell"
+                [class.active-cell]="panelOpen && currentIdx === i" (click)="openPanel(i)">
+                <img [src]="album.img" [alt]="album.title" loading="lazy">
+                <div class="album-hover">
+                    <div class="ah-title">{{ album.title }}</div>
+                    <div class="ah-artist">{{ album.artist }}</div>
+                    <div class="ah-year">{{ album.year }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL MODAL -->
+    <div class="panel-overlay" [class.open]="panelOpen" (click)="closePanel()">
+        <div class="panel-bg" [style.background]="panelBg"></div>
+
+        <button class="panel-close" (click)="closePanel()">✕ close</button>
+
+        <div class="panel-inner" (click)="$event.stopPropagation()">
+
+            <!-- Imagen grande -->
+            <div class="panel-img-side">
+                <img class="panel-album-img" [src]="current.img" [alt]="current.title">
+            </div>
+
+            <!-- Info -->
+            <div class="panel-info-side">
+                <span class="panel-num">{{ panelNum }}</span>
+                <h2 class="panel-title">{{ current.title }}</h2>
+                <p class="panel-artist">{{ current.artist }}</p>
+                <p class="panel-year">{{ current.year }}</p>
+                <div class="panel-divider"></div>
+                <span class="panel-genre">{{ current.genre }}</span>
+
+                <div class="panel-nav">
+                    <button class="nav-btn" (click)="prev()">←</button>
+                    <span class="nav-counter">{{ currentIdx + 1 }} of {{ albums.length }}</span>
+                    <button class="nav-btn" (click)="next()">→</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

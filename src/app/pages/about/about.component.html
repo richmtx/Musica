@@ -1,24 +1,71 @@
 <app-navbar></app-navbar>
 
+<div class="about-page">
 
-<section class="about-section">
-    <div class="about-container">
-        <div class="about-image">
-            <img src="assets/Chicago.jpg" alt="Description image">
-        </div>
-        <div class="about-text">
-            <h2>ABOUT THE PRODUCER</h2>
-            <p>
-                Ricardo Martínez is a music producer recognized for his innovative work in the industry. With years of
-                experience, he has worked with numerous artists, combining classical and modern techniques to create
-                unique sounds.
-            </p>
-            <p>
-                His private studio Rat Shack is setup with a collection of vintage and modern recording equipment
-                and instruments, with a focus on comfort and quality sound.
-                If you're interested in working with Ricardo, or have any questions, please visit the contact page
-                and send him a message.
-            </p>
+    <!-- HERO full-bleed -->
+    <div class="hero-img">
+        <img src="assets/Chicago.jpg" alt="Ricardo Martínez">
+        <div class="hero-overlay"></div>
+        <div class="hero-text">
+            <span class="hero-label">About the producer</span>
+            <h1 class="hero-title">
+                <span>R</span><span>i</span><span>c</span><span>a</span><span>r</span><span>d</span><span>o</span><span>&nbsp;</span><span>M</span><span>a</span><span>r</span><span>t</span><span>í</span><span>n</span><span>e</span><span>z</span>
+            </h1>
         </div>
     </div>
-</section>
+
+    <!-- CONTENT -->
+    <div class="about-content">
+        <div class="content-grid reveal">
+
+            <!-- Columna meta -->
+            <div class="col-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Role</span>
+                    <p class="meta-value">Music Producer</p>
+                </div>
+                <div class="divider-v"></div>
+                <div class="meta-item">
+                    <span class="meta-label">Studio</span>
+                    <p class="meta-value">Rat Shack</p>
+                </div>
+                <div class="divider-v"></div>
+                <div class="meta-item">
+                    <span class="meta-label">Speciality</span>
+                    <p class="meta-value">Classical &amp; Modern fusion</p>
+                </div>
+            </div>
+
+            <!-- Columna texto -->
+            <div class="col-body">
+                <div class="section-tag">Biography</div>
+                <div class="body-text">
+                    <p>
+                        Ricardo Martínez is a music producer recognized for his innovative work in the industry.
+                        With years of experience, he has worked with numerous artists, combining classical and
+                        modern techniques to create unique sounds.
+                    </p>
+                    <p>
+                        His private studio Rat Shack is set up with a collection of vintage and modern recording
+                        equipment and instruments, with a focus on comfort and quality sound.
+                    </p>
+                    <p>
+                        If you're interested in working with Ricardo, or have any questions, visit the contact
+                        page and send him a message.
+                    </p>
+                </div>
+                <div class="cta-row">
+                    <a routerLink="/contact" class="cta-link">Get in touch</a>
+                    <div class="cta-sep"></div>
+                    <a routerLink="/studio" class="cta-link">See the studio</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-div">
+            <span class="divider-text">fin</span>
+        </div>
+    </div>
+
+</div>
