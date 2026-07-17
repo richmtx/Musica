@@ -53,33 +53,20 @@
     opacity: 0.5;
 }
 
-/* ─── Header ─────────────────────────────────────────────────── */
-.page-header {
-    padding: 3.5rem 5% 2rem;
-    position: relative;
-    z-index: 1;
-    animation: fadeIn .8s ease .2s both;
-}
-
-.page-label {
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: #fff;
-    font-weight: 300;
-}
-
-/* ─── Albums grid ────────────────────────────────────────────── */
+/* ─── Albums grid (full-bleed) ───────────────────────────────── */
 .albums-wrap {
-    padding: 0 5% 5rem;
+    padding: 0;
+    margin: 0;
     position: relative;
     z-index: 1;
+    animation: fadeIn .8s ease .1s both;
 }
 
 .albums-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 2px;
+    gap: 0;
+    width: 100%;
 }
 
 /* ─── Album cell ─────────────────────────────────────────────── */
@@ -149,52 +136,79 @@
 }
 
 /* ─── Panel overlay ──────────────────────────────────────────── */
+/* Siempre cubre TODA la ventana, incluido el navbar */
 .panel-overlay {
     position: fixed;
     inset: 0;
-    z-index: 100;
+    z-index: 99999;
     display: none;
     align-items: stretch;
+    background: #000;
+    animation: fadeIn 0.35s ease both;
 }
 
 .panel-overlay.open {
     display: flex;
 }
 
+/* Cuando el navegador entra en fullscreen real */
+.panel-overlay:fullscreen {
+    width: 100vw;
+    height: 100vh;
+}
+
 .panel-bg {
     position: absolute;
-    inset: 0;
-    transition: background 1s ease;
+    inset: -10%;
+    transition: background 1.2s ease;
+    filter: blur(90px);
+    transform: translateZ(0);
+    will-change: filter;
 }
 
 .panel-bg::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.42);
 }
 
-/* Close button */
-.panel-close {
+/* ─── Controles (fullscreen / cerrar) ────────────────────────── */
+.panel-ctrl {
     position: absolute;
     top: 1.5rem;
-    right: 1.5rem;
     z-index: 10;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: transparent;
-    border: none;
+    border: 0.5px solid rgba(232, 228, 220, 0.18);
     color: rgba(232, 228, 220, 0.45);
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    font-weight: 300;
     cursor: pointer;
-    transition: color 0.3s;
-    padding: 0.5rem;
+    padding: 0;
+    transition: color 0.3s, border-color 0.3s, background 0.3s;
 }
 
-.panel-close:hover {
+.panel-ctrl svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+
+.panel-ctrl:hover {
     color: #e8e4dc;
+    border-color: rgba(232, 228, 220, 0.6);
+    background: rgba(232, 228, 220, 0.05);
+}
+
+.panel-expand {
+    left: 1.5rem;
+}
+
+.panel-close {
+    right: 1.5rem;
 }
 
 /* Panel grid */
@@ -202,7 +216,7 @@
     position: relative;
     z-index: 5;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.15fr 1fr;
     width: 100%;
     height: 100%;
 }
@@ -212,11 +226,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 5rem 4rem;
+    padding: 3rem 2.5rem 3rem 3.5rem;
 }
 
 .panel-album-img {
-    width: min(420px, 42vw);
+    width: min(640px, 90%, 72vh);
+    height: auto;
     aspect-ratio: 1;
     object-fit: cover;
     animation: albumBig 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -227,7 +242,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 5rem 4rem 5rem 2rem;
+    padding: 3rem 4rem 3rem 2.5rem;
     animation: panelIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
 }
 
@@ -321,6 +336,20 @@
 @media (max-width: 900px) {
     .albums-grid {
         grid-template-columns: repeat(3, 1fr);
+    }
+
+    .panel-ctrl {
+        top: 1rem;
+        width: 36px;
+        height: 36px;
+    }
+
+    .panel-expand {
+        left: 1rem;
+    }
+
+    .panel-close {
+        right: 1rem;
     }
 
     .panel-inner {

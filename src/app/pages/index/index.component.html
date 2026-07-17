@@ -5,11 +5,6 @@
 
 <div class="home-page" (keydown)="onKeydown($event)" tabindex="0">
 
-    <!-- HEADER -->
-    <div class="page-header">
-        <span class="page-label">Selected works</span>
-    </div>
-
     <!-- GRID DE ÁLBUMES -->
     <div class="albums-wrap">
         <div class="albums-grid">
@@ -26,10 +21,39 @@
     </div>
 
     <!-- PANEL MODAL -->
-    <div class="panel-overlay" [class.open]="panelOpen" (click)="closePanel()">
+    <div class="panel-overlay" #panelEl [class.open]="panelOpen" (click)="closePanel()">
         <div class="panel-bg" [style.background]="panelBg"></div>
 
-        <button class="panel-close" (click)="closePanel()">✕ close</button>
+        <!-- Controles superiores -->
+        <button class="panel-ctrl panel-expand" (click)="$event.stopPropagation(); toggleExpand()"
+            [attr.aria-label]="expanded ? 'Contraer' : 'Expandir'" [title]="expanded ? 'Contraer' : 'Expandir'">
+
+            <!-- Icono expandir -->
+            <svg *ngIf="!expanded" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <polyline points="9 21 3 21 3 15"></polyline>
+                <line x1="21" y1="3" x2="14" y2="10"></line>
+                <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+
+            <!-- Icono contraer -->
+            <svg *ngIf="expanded" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="4 14 10 14 10 20"></polyline>
+                <polyline points="20 10 14 10 14 4"></polyline>
+                <line x1="14" y1="10" x2="21" y2="3"></line>
+                <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+        </button>
+
+        <button class="panel-ctrl panel-close" (click)="$event.stopPropagation(); closePanel()" aria-label="Cerrar"
+            title="Cerrar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+                <line x1="5" y1="5" x2="19" y2="19"></line>
+                <line x1="19" y1="5" x2="5" y2="19"></line>
+            </svg>
+        </button>
 
         <div class="panel-inner" (click)="$event.stopPropagation()">
 

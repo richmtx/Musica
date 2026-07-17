@@ -1,7 +1,4 @@
-import {
-  AfterViewInit, Component, ElementRef,
-  Inject, OnDestroy, PLATFORM_ID, ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
@@ -72,8 +69,16 @@ export class IndexComponent implements AfterViewInit, OnDestroy {
   ];
 
   panelOpen = false;
+  expanded = false;
   currentIdx = 0;
   panelBg = '#0a0a0a';
+
+  private fsHandler = () => {
+    // Sincroniza el estado si el usuario sale con Esc o F11
+    if (isPlatformBrowser(this.platformId)) {
+      this.expanded = !!document.fullscreenElement;
+    }
+  };
 
   get current(): Album { return this.albums[this.currentIdx]; }
   get panelNum(): string {
@@ -81,12 +86,20 @@ export class IndexComponent implements AfterViewInit, OnDestroy {
   }
 
   @ViewChild('colorCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('panelEl') panelRef!: ElementRef<HTMLDivElement>;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
-  ngAfterViewInit(): void { }
+  ngAfterViewInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      document.addEventListener('fullscreenchange', this.fsHandler);
+    }
+  }
 
   ngOnDestroy(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      document.removeEventListener('fullscreenchange', this.fsHandler);
+    }
     this.closePanel();
   }
 
@@ -94,7 +107,6 @@ export class IndexComponent implements AfterViewInit, OnDestroy {
     this.currentIdx = idx;
     this.panelOpen = true;
 
-    // ✅ Guard agregado aquí también
     if (isPlatformBrowser(this.platformId)) {
       document.body.style.overflow = 'hidden';
       this.extractColor(this.albums[idx].img);
@@ -102,12 +114,30 @@ export class IndexComponent implements AfterViewInit, OnDestroy {
   }
 
   closePanel(): void {
-    this.panelOpen = false;
-    this.panelBg = '#0a0a0a';
-
-    // ✅ Guard agregado aquí
     if (isPlatformBrowser(this.platformId)) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => { });
+      }
       document.body.style.overflow = '';
+    }
+    this.panelOpen = false;
+    this.expanded = false;
+    this.panelBg = '#0a0a0a';
+  }
+
+  async toggleExpand(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const el = this.panelRef?.nativeElement;
+    if (!el) return;
+
+    try {
+      if (!document.fullscreenElement) {
+        await el.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+    } catch (err) {
+      console.warn('Fullscreen no disponible:', err);
     }
   }
 
@@ -123,36 +153,128 @@ export class IndexComponent implements AfterViewInit, OnDestroy {
     if (!this.panelOpen) return;
     if (e.key === 'ArrowRight') this.next();
     if (e.key === 'ArrowLeft') this.prev();
-    if (e.key === 'Escape') this.closePanel();
+    if (e.key === 'f' || e.key === 'F') this.toggleExpand();
+    // Esc lo maneja el navegador cuando está en fullscreen
+    if (e.key === 'Escape' && !document.fullscreenElement) this.closePanel();
   }
 
   private extractColor(src: string): void {
     const canvas = this.canvasRef?.nativeElement;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     if (!ctx) return;
 
-    canvas.width = 50;
-    canvas.height = 50;
+    const S = 64;
+    canvas.width = S;
+    canvas.height = S;
 
     const img = new Image();
     img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      ctx.drawImage(img, 0, 0, 50, 50);
-      const data = ctx.getImageData(0, 0, 50, 50).data;
-      let r = 0, g = 0, b = 0, count = 0;
-      for (let i = 0; i < data.length; i += 16) {
-        r += data[i]; g += data[i + 1]; b += data[i + 2]; count++;
-      }
-      r = Math.round(r / count);
-      g = Math.round(g / count);
-      b = Math.round(b / count);
 
-      const dark = `rgb(${Math.round(r * .22)},${Math.round(g * .22)},${Math.round(b * .22)})`;
-      const mid = `rgb(${Math.round(r * .42)},${Math.round(g * .42)},${Math.round(b * .42)})`;
-      this.panelBg = `radial-gradient(ellipse at 30% 50%, ${mid} 0%, ${dark} 60%, #060606 100%)`;
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, S, S);
+      const data = ctx.getImageData(0, 0, S, S).data;
+
+      const bins = new Map<number, { r: number; g: number; b: number; n: number }>();
+
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i], g = data[i + 1], b = data[i + 2];
+        const max = Math.max(r, g, b), min = Math.min(r, g, b);
+        const sat = max === 0 ? 0 : (max - min) / max;
+
+        if (max < 24 || min > 240) continue;
+        if (sat < 0.10 && max < 80) continue;
+
+        const key = ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4);
+        const bin = bins.get(key);
+        if (bin) { bin.r += r; bin.g += g; bin.b += b; bin.n++; }
+        else bins.set(key, { r, g, b, n: 1 });
+      }
+
+      const candidates = [...bins.values()]
+        .map(v => {
+          const r = v.r / v.n, g = v.g / v.n, b = v.b / v.n;
+          const hsl = this.toHsl(r, g, b);
+          return { ...hsl, score: v.n * (0.4 + hsl.s * 1.2) };
+        })
+        .sort((a, b) => b.score - a.score);
+
+      // ← Diversidad de matiz: descarta colores muy parecidos a los ya elegidos
+      const palette: { h: number; s: number }[] = [];
+      const MIN_HUE_DIST = 28;
+
+      for (const c of candidates) {
+        if (palette.length >= 4) break;
+        const tooClose = palette.some(p => {
+          const d = Math.abs(p.h - c.h);
+          return Math.min(d, 360 - d) < MIN_HUE_DIST;
+        });
+        if (!tooClose) palette.push({ h: c.h, s: c.s });
+      }
+
+      // Rellena si la portada es monocromática: rota el matiz manualmente
+      while (palette.length < 4 && palette.length > 0) {
+        const base = palette[0];
+        palette.push({ h: (base.h + 40 * palette.length) % 360, s: base.s * 0.8 });
+      }
+
+      if (!palette.length) { this.panelBg = '#0a0a0a'; return; }
+
+      const c = (i: number, l: number, a: number) => {
+        const p = palette[i % palette.length];
+        const s = Math.min(0.85, p.s * 1.1 + 0.15);
+        return `hsl(${p.h.toFixed(0)} ${(s * 100).toFixed(0)}% ${(l * 100).toFixed(0)}% / ${a})`;
+      };
+
+      this.panelBg = [
+        `radial-gradient(circle at 18% 20%, ${c(0, 0.34, 0.95)} 0%, transparent 55%)`,
+        `radial-gradient(circle at 82% 25%, ${c(1, 0.26, 0.85)} 0%, transparent 52%)`,
+        `radial-gradient(circle at 25% 82%, ${c(2, 0.22, 0.80)} 0%, transparent 50%)`,
+        `radial-gradient(circle at 85% 78%, ${c(3, 0.28, 0.75)} 0%, transparent 52%)`,
+        `linear-gradient(160deg, ${c(0, 0.14, 1)} 0%, ${c(1, 0.09, 1)} 100%)`
+      ].join(', ');
     };
+
     img.onerror = () => { this.panelBg = '#0a0a0a'; };
     img.src = src;
+  }
+
+  private toHsl(r: number, g: number, b: number): { h: number; s: number; l: number } {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const l = (max + min) / 2;
+    const d = max - min;
+    let h = 0;
+    const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+
+    if (d !== 0) {
+      if (max === r) h = ((g - b) / d) % 6;
+      else if (max === g) h = (b - r) / d + 2;
+      else h = (r - g) / d + 4;
+      h *= 60;
+      if (h < 0) h += 360;
+    }
+    return { h, s, l };
+  }
+
+  /** Sube la saturación y fija la luminosidad → color vivo tipo Apple Music */
+  private punch(r: number, g: number, b: number, lightness: number): string {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h = 0;
+    const l = (max + min) / 2;
+    const d = max - min;
+    let s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+
+    if (d !== 0) {
+      if (max === r) h = ((g - b) / d) % 6;
+      else if (max === g) h = (b - r) / d + 2;
+      else h = (r - g) / d + 4;
+      h *= 60;
+      if (h < 0) h += 360;
+    }
+
+    s = Math.min(1, s * 1.75 + 0.25);   // ← realce de saturación
+    return `hsl(${h.toFixed(0)} ${(s * 100).toFixed(0)}% ${(lightness * 100).toFixed(0)}%)`;
   }
 }
