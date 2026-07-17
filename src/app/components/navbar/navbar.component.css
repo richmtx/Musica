@@ -41,6 +41,10 @@
     color: #f0a500;
 }
 
+.nav-links a.active {
+    color: #f0a500;
+}
+
 .menu-icon {
     display: none;
     flex-direction: column;

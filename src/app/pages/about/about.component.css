@@ -73,12 +73,18 @@
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 40%, rgba(10, 10, 10, 0.95) 100%);
+    background: linear-gradient(to bottom,
+            transparent 25%,
+            rgba(0, 0, 0, 0.35) 55%,
+            rgba(0, 0, 0, 0.8) 80%,
+            #000 100%);
 }
 
 .hero-text {
     position: absolute;
-    bottom: 3.5rem;
+    top: 75%;
+    transform: translateY(-50%);
+    bottom: auto;
     left: 5%;
     right: 5%;
     z-index: 2;
@@ -91,7 +97,7 @@
     text-transform: uppercase;
     color: rgba(232, 228, 220, 0.35);
     font-weight: 300;
-    margin-bottom: 1rem;
+    margin-bottom: 0.35rem;
     opacity: 0;
     animation: fadeIn 0.8s ease 0.4s forwards;
 }
@@ -104,6 +110,7 @@
     color: #e8e4dc;
     line-height: 0.95;
     letter-spacing: 0.02em;
+    margin: 0;
 }
 
 .hero-title span {
